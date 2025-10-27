@@ -1,0 +1,16 @@
+{
+    "name": "frida-elden-ring",
+    "version": "0.0.0",
+    "license": "MIT",
+    "type": "module",
+    "devDependencies": {
+        "@types/frida-gum": "^18.3.1",
+        "frida-compile": "^16.1.8",
+        "typescript": "^5.9.3"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "tabWidth": 4,
+        "trailingComma": "all"
+    }
+}
