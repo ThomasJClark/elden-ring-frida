@@ -1,4 +1,4 @@
-import { rvaToVa } from "./rvas.js";
+import symbols from "./symbols.js";
 
 const UNDNAME_NO_ARGUMENTS = 0x2000;
 const COL_SIG_REV1 = 1;
@@ -19,7 +19,7 @@ export default function getTypeName(pointer: NativePointer): string | undefined 
             return;
         }
 
-        const typeDescriptor = rvaToVa(completeObjectLocator.add(0xc).readInt());
+        const typeDescriptor = symbols.base.add(completeObjectLocator.add(0xc).readInt());
         let rawName = typeDescriptor.add(0x10);
 
         // Skip first '.' character in the mangled RTTI name. UnDecorateSymbolName expects the input to

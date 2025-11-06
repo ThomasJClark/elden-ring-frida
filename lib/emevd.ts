@@ -1,21 +1,26 @@
-import RVA, { rvaToVa } from "./rvas.js";
+import symbols from "./symbols.js";
 
-const emkEventInsCtor = new NativeFunction(
-    rvaToVa(RVA["CS::CSEmkEventIns::CSEmkEventIns"]),
+const emkEventInsCtor = new NativeFunction(symbols["CS::CSEmkEventIns::CSEmkEventIns"], "pointer", [
     "pointer",
-    ["pointer", "pointer", "pointer", "pointer", "int", "int", "int"],
-);
-const emkEventInsDtor = new NativeFunction(
-    rvaToVa(RVA["CS::CSEmkEventIns::~CSEmkEventIns"]),
-    "void",
-    ["pointer"],
-);
-const emevdGroupSwitch = new NativeFunction(rvaToVa(RVA["EMEVD::EMEVDGroupSwitch"]), "bool", [
+    "pointer",
+    "pointer",
+    "pointer",
+    "int",
+    "int",
+    "int",
+]);
+
+const emkEventInsDtor = new NativeFunction(symbols["CS::CSEmkEventIns::~CSEmkEventIns"], "void", [
+    "pointer",
+]);
+
+const emevdGroupSwitch = new NativeFunction(symbols["EMEVD::EMEVDGroupSwitch"], "bool", [
     "pointer",
     "float",
     "pointer",
 ]);
-const csEmkSystem = rvaToVa(RVA["GLOBAL_CSEmkSystem"]);
+
+const csEmkSystem = symbols["GLOBAL_CSEmkSystem"];
 
 /**
  * Execute a single adhoc EMEVD instruction, returning an condition result if there is one
@@ -60,7 +65,6 @@ export default function emevd(
     const mapId = -1;
 
     const emkEventIns = Memory.alloc(0x1b0);
-
     emkEventInsCtor(emkEventIns, eventId, unk, eventArgs, eventArgsLength, mapId, mapId);
 
     const instruction = Memory.alloc(0x28);

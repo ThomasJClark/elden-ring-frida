@@ -1,7 +1,7 @@
-import RVA, { rvaToVa } from "./rvas.js";
+import symbols from "./symbols.js";
 
 const getHeapAllocatorOf = new NativeFunction(
-    rvaToVa(RVA["DLKR::DLAllocator::GetHeapAllocatorOf"]),
+    symbols["DLKR::DLAllocator::GetHeapAllocatorOf"],
     "pointer",
     ["pointer"],
 );
