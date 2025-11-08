@@ -12,6 +12,11 @@ const rvas = {
     "CS::CSEmkEventIns::CSEmkEventIns": 0x582700,
     "DLKR::DLAllocator::GetHeapAllocatorOf": 0xe1a2c0,
     "EMEVD::EMEVDGroupSwitch": 0x567e00,
+    "hkbInternal::hksi_lua_call": 0x14e36f0,
+    "hkbInternal::hksi_lua_getglobal": 0x14e4570,
+    "hkbInternal::hksi_lua_pushnil": 0x14f0390,
+    "hkbInternal::hksi_lua_pushnumber": 0x14f03b0,
+    "hkbInternal::hksi_lua_pushstring": 0x14f03d0,
     GLOBAL_CSEmkSystem: 0x3d67bd0,
 };
 
