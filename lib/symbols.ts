@@ -10,6 +10,8 @@ const rvas = {
     base: 0x0,
     "CS::CSEmkEventIns::~CSEmkEventIns": 0x5828d0,
     "CS::CSEmkEventIns::CSEmkEventIns": 0x582700,
+    "CS::CSEzStateTalkEvent::CSEzStateTalkEvent": 0xea5190,
+    "CS::CSEzStateTalkEvent::Invoke": 0xea52b0,
     "DLKR::DLAllocator::GetHeapAllocatorOf": 0xe1a2c0,
     "EMEVD::EMEVDGroupSwitch": 0x567e00,
     "hkbInternal::hksi_lua_call": 0x14e36f0,
