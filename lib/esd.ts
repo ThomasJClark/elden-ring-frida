@@ -22,6 +22,14 @@ export class EzStateValue implements ObjectWrapper {
         }
     }
 
+    getType() {
+        return {
+            1: EzStateValueType.Float,
+            2: EzStateValueType.Int,
+            3: EzStateValueType.Unk,
+        }[this.handle.add(0x8).readInt()] as EzStateValueType;
+    }
+
     getValue() {
         const type = this.handle.add(0x8).readInt() as EzStateValueType;
         if (type === EzStateValueType.Float) {
@@ -30,7 +38,7 @@ export class EzStateValue implements ObjectWrapper {
         if (type === EzStateValueType.Int) {
             return this.handle.add(0x0).readInt();
         }
-        return null;
+        return this.handle.add(0x0);
     }
 }
 
@@ -55,6 +63,31 @@ export class CSEzStateTalkEvent implements ObjectWrapper {
     invokeExternalEvent(...args: number[]) {
         const externalEvent = new EzStateExternalEventTemp(args[0], args);
         CSEzStateTalkEvent.invoke(this, externalEvent);
+    }
+}
+
+export class EzStateEvent implements ObjectWrapper {
+    handle: NativePointer;
+
+    constructor(handle: NativePointer) {
+        this.handle = handle;
+    }
+
+    getId() {
+        const fn = this.handle.readPointer().add(2 * Process.pointerSize);
+        return new NativeFunction(fn.readPointer(), "int", ["pointer"])(this);
+    }
+
+    getArgCount() {
+        const fn = this.handle.readPointer().add(3 * Process.pointerSize);
+        return new NativeFunction(fn.readPointer(), "int", ["pointer"])(this);
+    }
+
+    getArg(idx: number) {
+        const fn = this.handle.readPointer().add(4 * Process.pointerSize);
+        return new EzStateValue(
+            new NativeFunction(fn.readPointer(), "pointer", ["pointer", "int"])(this, idx),
+        );
     }
 }
 
