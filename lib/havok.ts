@@ -223,3 +223,18 @@ export class HkaSkeleton implements ObjectWrapper {
         return new HkQsTransform(referencePoses.add(index * 0x30));
     }
 }
+
+export class HkbCharacter implements ObjectWrapper {
+    handle: NativePointer;
+
+    constructor(handle: NativePointer) {
+        this.handle = handle;
+    }
+
+    get skeleton() {
+        return new HkaSkeleton(
+            this.handle.add(0x90).readPointer().add(0x28).readPointer(),
+            this.handle.add(0x38).readPointer().readPointer(),
+        );
+    }
+}
