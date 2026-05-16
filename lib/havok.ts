@@ -161,6 +161,12 @@ export class BoneWrapper {
         this.pose.assign(value);
     }
 
+    get parent(): BoneWrapper | null {
+        const parentIndex = this.skeleton.parentIndexAt(this.index);
+        if (parentIndex === -1) return null;
+        return new BoneWrapper(this.skeleton, parentIndex);
+    }
+
     toString() {
         return `(${this.name}: lockTranslation=${this.lockTranslation}, pose=${this.pose} referencePose=${this.referencePose})`;
     }
