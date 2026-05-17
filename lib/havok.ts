@@ -1,7 +1,58 @@
-export class HkVector4 implements ObjectWrapper {
+export abstract class IVec4 {
+    abstract x: number;
+    abstract y: number;
+    abstract z: number;
+    abstract w: number;
+
+    multiplyScalar(scalar: number): Vec4 {
+        return new Vec4(this.x * scalar, this.y * scalar, this.z * scalar, this.w * scalar);
+    }
+
+    multiplyVector(vector: IVec4) {
+        const { x, y, z, w } = this;
+        this.x = w * vector.x + x * vector.w + y * vector.z - z * vector.y;
+        this.y = w * vector.y - x * vector.z + y * vector.w + z * vector.x;
+        this.z = w * vector.z + x * vector.y - y * vector.x + z * vector.w;
+        this.w = w * vector.w - x * vector.x - y * vector.y - z * vector.z;
+    }
+
+    getLength() {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    }
+
+    normalize() {
+        const length = this.getLength();
+        if (length !== 0) {
+            this.x /= length;
+            this.y /= length;
+            this.z /= length;
+            this.w /= length;
+        }
+    }
+
+    copy() {
+        return new Vec4(this.x, this.y, this.z, this.w);
+    }
+}
+
+/** Vector stored in JavaScript memory */
+export class Vec4 extends IVec4 {
+    constructor(
+        public x: number,
+        public y: number,
+        public z: number,
+        public w: number = 0,
+    ) {
+        super();
+    }
+}
+
+/** Handle to a vector stored in game memory */
+export class HkVector4 extends IVec4 implements ObjectWrapper {
     handle: NativePointer;
 
     constructor(handle: NativePointer) {
+        super();
         this.handle = handle;
     }
 
@@ -33,32 +84,7 @@ export class HkVector4 implements ObjectWrapper {
         this.handle.add(0xc).writeFloat(value);
     }
 
-    normalize() {
-        const { x, y, z, w } = this;
-        const length = Math.sqrt(x * x + y * y + z * z + w * w);
-        if (length !== 0) {
-            this.x = x / length;
-            this.y = y / length;
-            this.z = z / length;
-            this.w = w / length;
-        }
-    }
-
-    set(...args: [HkVector4] | [number, number, number] | [number, number, number, number]) {
-        if (args.length === 1 && args[0] instanceof HkVector4) {
-            this.x = args[0].x;
-            this.y = args[0].y;
-            this.z = args[0].z;
-            this.w = args[0].w;
-        } else {
-            this.x = +args[0];
-            this.y = +args[1]!;
-            this.z = +args[2]!;
-            this.w = +(args[3] ?? 0);
-        }
-    }
-
-    assign(other: HkVector4) {
+    assign(other: IVec4) {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
@@ -140,7 +166,7 @@ export class BoneWrapper {
     }
 
     get name() {
-        return this.skeleton.hkaBoneAt(this.index).name;
+        return this.skeleton.hkaBoneAt(this.index).name!;
     }
 
     get lockTranslation() {
